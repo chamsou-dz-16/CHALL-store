@@ -5,7 +5,7 @@ import Hero from './Hero';
 import { Plus } from 'lucide-react';
 
 const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
-  const { addToCart } = useStore();
+  const { addToCart, t } = useStore();
   const [selectedSize, setSelectedSize] = useState<string | undefined>(
     product.sizes && product.sizes.length > 0 ? product.sizes[0] : undefined
   );
@@ -18,9 +18,9 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           alt={product.name}
           className="absolute top-0 left-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute top-2 right-2">
+        <div className="absolute top-2 right-2 rtl:right-auto rtl:left-2">
           <span className="bg-white/90 backdrop-blur-sm text-chall-dark text-xs font-bold px-2 py-1 rounded-full shadow-sm">
-            {product.category}
+            {t(`cat.${product.category}`)}
           </span>
         </div>
       </div>
@@ -34,7 +34,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
         {/* Size Selector */}
         {product.sizes && product.sizes.length > 0 && (
           <div className="mb-4">
-            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">Taille :</label>
+            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">{t('shop.size')}</label>
             <div className="flex flex-wrap gap-2">
               {product.sizes.map(size => (
                 <button
@@ -65,15 +65,15 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           >
             {product.stock > 0 ? (
               <>
-                <Plus size={18} className="mr-2" />
-                Ajouter au panier
+                <Plus size={18} className="me-2" />
+                {t('shop.add_cart')}
               </>
             ) : (
-              'Rupture de stock'
+              t('shop.out_stock')
             )}
           </button>
           {product.stock > 0 && product.stock < 5 && (
-            <p className="text-xs text-chall-red mt-2 text-center font-medium">Plus que {product.stock} exemplaires !</p>
+            <p className="text-xs text-chall-red mt-2 text-center font-medium">{t('shop.remaining', { qty: product.stock })}</p>
           )}
         </div>
       </div>
@@ -82,7 +82,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
 };
 
 const Shop: React.FC = () => {
-  const { products } = useStore();
+  const { products, t } = useStore();
   const [selectedCategory, setSelectedCategory] = useState<string>('Tout');
 
   const filteredProducts = selectedCategory === 'Tout'
@@ -95,10 +95,10 @@ const Shop: React.FC = () => {
       
       <div id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
-          <h2 className="text-3xl font-extrabold text-gray-900 mb-4 md:mb-0">Collection</h2>
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-4 md:mb-0">{t('shop.collection')}</h2>
           
           {/* Filter Categories */}
-          <div className="flex overflow-x-auto space-x-2 pb-2 md:pb-0 scrollbar-hide">
+          <div className="flex overflow-x-auto space-x-2 rtl:space-x-reverse pb-2 md:pb-0 scrollbar-hide">
              <button
                 onClick={() => setSelectedCategory('Tout')}
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
@@ -107,7 +107,7 @@ const Shop: React.FC = () => {
                     : 'bg-white text-gray-600 hover:bg-orange-50 border border-gray-200'
                 }`}
               >
-                Tout voir
+                {t('shop.all')}
               </button>
             {CATEGORIES.map(cat => (
               <button
@@ -119,7 +119,7 @@ const Shop: React.FC = () => {
                     : 'bg-white text-gray-600 hover:bg-orange-50 border border-gray-200'
                 }`}
               >
-                {cat}
+                {t(`cat.${cat}`)}
               </button>
             ))}
           </div>
@@ -134,7 +134,7 @@ const Shop: React.FC = () => {
         
         {filteredProducts.length === 0 && (
             <div className="text-center py-20">
-                <p className="text-xl text-gray-500">Aucun produit disponible dans cette collection.</p>
+                <p className="text-xl text-gray-500">{t('shop.empty')}</p>
             </div>
         )}
       </div>

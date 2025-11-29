@@ -8,7 +8,7 @@ interface CartSidebarProps {
 }
 
 const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
-  const { cart, removeFromCart, updateCartQuantity, setView } = useStore();
+  const { cart, removeFromCart, updateCartQuantity, setView, t } = useStore();
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
@@ -17,14 +17,14 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
       <div className="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={onClose}></div>
-      <div className="fixed inset-y-0 right-0 max-w-full flex">
+      <div className="fixed inset-y-0 right-0 rtl:right-auto rtl:left-0 max-w-full flex">
         <div className="w-screen max-w-md">
           <div className="h-full flex flex-col bg-white shadow-xl">
             <div className="flex-1 py-6 overflow-y-auto px-4 sm:px-6">
               <div className="flex items-start justify-between">
                 <h2 className="text-lg font-medium text-gray-900 flex items-center">
-                    <ShoppingBag className="mr-2" />
-                    Votre Panier
+                    <ShoppingBag className="me-2" />
+                    {t('cart.title')}
                 </h2>
                 <button
                   type="button"
@@ -38,12 +38,12 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
               <div className="mt-8">
                 {cart.length === 0 ? (
                   <div className="text-center py-12">
-                    <p className="text-gray-500 text-lg">Votre panier est vide.</p>
+                    <p className="text-gray-500 text-lg">{t('cart.empty')}</p>
                     <button 
                         onClick={onClose}
                         className="mt-4 text-chall-orange hover:underline font-medium"
                     >
-                        Continuer vos achats
+                        {t('cart.continue')}
                     </button>
                   </div>
                 ) : (
@@ -58,15 +58,15 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                           />
                         </div>
 
-                        <div className="ml-4 flex-1 flex flex-col">
+                        <div className="ml-4 rtl:ml-0 rtl:mr-4 flex-1 flex flex-col">
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
-                              <h3 className="line-clamp-1 mr-2">{item.name}</h3>
+                              <h3 className="line-clamp-1 mr-2 rtl:mr-0 rtl:ml-2">{item.name}</h3>
                               <p className="whitespace-nowrap">{item.price.toLocaleString('fr-DZ')} DA</p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">{item.category}</p>
                             {item.selectedSize && (
-                                <p className="mt-1 text-sm text-chall-orange font-medium">Taille : {item.selectedSize}</p>
+                                <p className="mt-1 text-sm text-chall-orange font-medium">{t('shop.size')} {item.selectedSize}</p>
                             )}
                           </div>
                           <div className="flex-1 flex items-end justify-between text-sm">
@@ -87,8 +87,8 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                               onClick={() => removeFromCart(item.id, item.selectedSize)}
                               className="font-medium text-chall-red hover:text-red-800 flex items-center"
                             >
-                              <Trash2 size={16} className="mr-1" />
-                              Supprimer
+                              <Trash2 size={16} className="me-1" />
+                              {t('cart.remove')}
                             </button>
                           </div>
                         </div>
@@ -102,11 +102,11 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
             {cart.length > 0 && (
               <div className="border-t border-gray-200 py-6 px-4 sm:px-6 bg-gray-50">
                 <div className="flex justify-between text-base font-medium text-gray-900 mb-4">
-                  <p>Sous-total</p>
+                  <p>{t('cart.subtotal')}</p>
                   <p>{total.toLocaleString('fr-DZ')} DA</p>
                 </div>
                 <p className="mt-0.5 text-sm text-gray-500 mb-6">
-                  Taxes et frais de livraison calculés à la commande.
+                  {t('cart.taxes')}
                 </p>
                 <div className="mt-6">
                   <button
@@ -116,7 +116,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                     }}
                     className="w-full flex justify-center items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-chall-orange hover:bg-orange-600 transition"
                   >
-                    Commander
+                    {t('cart.checkout')}
                   </button>
                 </div>
               </div>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, ArrowRight } from 'lucide-react';
 
 const Checkout: React.FC = () => {
-  const { cart, placeOrder, setView, view } = useStore();
+  const { cart, placeOrder, setView, view, t, language } = useStore();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -23,15 +23,15 @@ const Checkout: React.FC = () => {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center px-4">
         <CheckCircle className="text-chall-orange w-24 h-24 mb-6" />
-        <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Merci pour votre commande !</h2>
+        <h2 className="text-3xl font-extrabold text-gray-900 mb-2">{t('checkout.success_title')}</h2>
         <p className="text-gray-600 mb-8 text-center max-w-md">
-          Votre commande a été reçue avec succès. Nous préparons vos produits algériens avec soin.
+          {t('checkout.success_msg')}
         </p>
         <button
           onClick={() => setView('shop')}
           className="bg-chall-orange text-white px-8 py-3 rounded-md font-medium hover:bg-orange-600 transition"
         >
-          Retour à la boutique
+          {t('checkout.return_shop')}
         </button>
       </div>
     );
@@ -44,20 +44,20 @@ const Checkout: React.FC = () => {
             onClick={() => setView('shop')}
             className="flex items-center text-gray-600 hover:text-chall-orange mb-8 transition"
         >
-            <ArrowLeft className="mr-2" size={20}/>
-            Retour aux achats
+            {language === 'ar' ? <ArrowRight className="me-2" size={20}/> : <ArrowLeft className="me-2" size={20}/>}
+            {t('checkout.back')}
         </button>
 
         <div className="bg-white shadow overflow-hidden sm:rounded-lg">
           <div className="px-4 py-5 sm:px-6 bg-gray-50 border-b border-gray-200">
-            <h3 className="text-lg leading-6 font-medium text-gray-900">Finaliser la commande</h3>
+            <h3 className="text-lg leading-6 font-medium text-gray-900">{t('checkout.title')}</h3>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6">
             
             {/* Order Summary */}
             <div className="md:order-2">
-                <h4 className="text-lg font-medium text-gray-900 mb-4">Récapitulatif</h4>
+                <h4 className="text-lg font-medium text-gray-900 mb-4">{t('checkout.summary')}</h4>
                 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <ul className="divide-y divide-gray-200 mb-4">
                         {cart.map(item => (
@@ -76,11 +76,11 @@ const Checkout: React.FC = () => {
 
             {/* Shipping Form */}
             <div className="md:order-1">
-                <h4 className="text-lg font-medium text-gray-900 mb-4">Informations de livraison</h4>
+                <h4 className="text-lg font-medium text-gray-900 mb-4">{t('checkout.shipping_info')}</h4>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Prénom</label>
+                            <label className="block text-sm font-medium text-gray-700">{t('checkout.firstname')}</label>
                             <input 
                                 required
                                 type="text" 
@@ -90,7 +90,7 @@ const Checkout: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Nom</label>
+                            <label className="block text-sm font-medium text-gray-700">{t('checkout.lastname')}</label>
                             <input 
                                 required
                                 type="text" 
@@ -102,7 +102,7 @@ const Checkout: React.FC = () => {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Adresse</label>
+                        <label className="block text-sm font-medium text-gray-700">{t('checkout.address')}</label>
                         <input 
                             required
                             type="text" 
@@ -114,7 +114,7 @@ const Checkout: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Ville (Wilaya)</label>
+                            <label className="block text-sm font-medium text-gray-700">{t('checkout.city')}</label>
                             <input 
                                 required
                                 type="text" 
@@ -124,7 +124,7 @@ const Checkout: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700">Téléphone</label>
+                            <label className="block text-sm font-medium text-gray-700">{t('checkout.phone')}</label>
                             <input 
                                 required
                                 type="tel" 
@@ -140,7 +140,7 @@ const Checkout: React.FC = () => {
                             type="submit"
                             className="w-full bg-chall-orange text-white py-3 px-4 rounded-md font-medium hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-chall-orange transition shadow-md"
                         >
-                            Confirmer la commande
+                            {t('checkout.confirm')}
                         </button>
                     </div>
                 </form>

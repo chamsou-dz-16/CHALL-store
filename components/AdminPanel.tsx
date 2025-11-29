@@ -5,7 +5,7 @@ import { Trash2, Edit, Package, ShoppingBag, Plus, Sparkles, Loader2, Save, X, S
 import { generateProductDescription } from '../services/geminiService';
 
 const AdminPanel: React.FC = () => {
-  const { products, orders, addProduct, updateProduct, deleteProduct, updateOrderStatus } = useStore();
+  const { products, orders, addProduct, updateProduct, deleteProduct, updateOrderStatus, t } = useStore();
   const [activeTab, setActiveTab] = useState<'statistics' | 'products' | 'orders' | 'settings'>('statistics');
   
   // Product Form State
@@ -127,7 +127,7 @@ const AdminPanel: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Tableau de Bord Administrateur</h1>
+        <h1 className="text-3xl font-bold text-gray-900">{t('admin.dashboard')}</h1>
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -139,7 +139,7 @@ const AdminPanel: React.FC = () => {
           >
             <div className="flex items-center justify-center gap-2">
                 <BarChart3 size={20} />
-                Statistiques
+                {t('admin.stats')}
             </div>
           </button>
           <button
@@ -148,7 +148,7 @@ const AdminPanel: React.FC = () => {
           >
             <div className="flex items-center justify-center gap-2">
                 <Package size={20} />
-                Produits
+                {t('admin.products')}
             </div>
           </button>
           <button
@@ -157,7 +157,7 @@ const AdminPanel: React.FC = () => {
           >
             <div className="flex items-center justify-center gap-2">
                 <ShoppingBag size={20} />
-                Commandes ({orders.length})
+                {t('admin.orders')} ({orders.length})
             </div>
           </button>
           <button
@@ -166,7 +166,7 @@ const AdminPanel: React.FC = () => {
           >
             <div className="flex items-center justify-center gap-2">
                 <Settings size={20} />
-                Paramètres
+                {t('admin.settings')}
             </div>
           </button>
         </div>
@@ -179,7 +179,7 @@ const AdminPanel: React.FC = () => {
                       <div className="bg-gradient-to-br from-chall-orange to-orange-600 rounded-lg shadow-lg p-6 text-white">
                           <div className="flex justify-between items-center">
                               <div>
-                                  <p className="text-white/80 text-sm font-medium">Chiffre d'Affaires Total</p>
+                                  <p className="text-white/80 text-sm font-medium">{t('admin.revenue')}</p>
                                   <p className="text-3xl font-bold mt-1">{totalRevenue.toLocaleString('fr-DZ')} DA</p>
                               </div>
                               <div className="bg-white/20 p-3 rounded-full">
@@ -187,7 +187,7 @@ const AdminPanel: React.FC = () => {
                               </div>
                           </div>
                           <div className="mt-4 flex items-center text-xs text-white/70">
-                              <TrendingUp size={14} className="mr-1" />
+                              <TrendingUp size={14} className="me-1" />
                               <span>+12% ce mois-ci</span>
                           </div>
                       </div>
@@ -195,7 +195,7 @@ const AdminPanel: React.FC = () => {
                       <div className="bg-white rounded-lg shadow-md border border-gray-100 p-6">
                           <div className="flex justify-between items-center">
                               <div>
-                                  <p className="text-gray-500 text-sm font-medium">Commandes Totales</p>
+                                  <p className="text-gray-500 text-sm font-medium">{t('admin.total_orders')}</p>
                                   <p className="text-3xl font-bold mt-1 text-gray-900">{totalOrders}</p>
                               </div>
                               <div className="bg-blue-50 p-3 rounded-full">
@@ -207,7 +207,7 @@ const AdminPanel: React.FC = () => {
                       <div className="bg-white rounded-lg shadow-md border border-gray-100 p-6">
                           <div className="flex justify-between items-center">
                               <div>
-                                  <p className="text-gray-500 text-sm font-medium">Panier Moyen</p>
+                                  <p className="text-gray-500 text-sm font-medium">{t('admin.avg_cart')}</p>
                                   <p className="text-3xl font-bold mt-1 text-gray-900">{Math.round(averageOrderValue).toLocaleString('fr-DZ')} DA</p>
                               </div>
                               <div className="bg-green-50 p-3 rounded-full">
@@ -222,7 +222,7 @@ const AdminPanel: React.FC = () => {
                       {/* Bar Chart */}
                       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                           <h3 className="text-lg font-bold text-gray-800 mb-6">Aperçu des Ventes (DA)</h3>
-                          <div className="h-64 flex items-end justify-between space-x-2">
+                          <div className="h-64 flex items-end justify-between space-x-2 rtl:space-x-reverse">
                               {chartData.map((data, index) => (
                                 <div key={index} className="flex flex-col items-center flex-1 group relative">
                                     <div 
@@ -383,7 +383,7 @@ const AdminPanel: React.FC = () => {
                             type="submit" 
                             className="flex-1 flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-chall-orange hover:bg-orange-600 focus:outline-none"
                         >
-                           {isEditing ? <Save size={16} className="mr-2"/> : <Plus size={16} className="mr-2"/>}
+                           {isEditing ? <Save size={16} className="me-2"/> : <Plus size={16} className="me-2"/>}
                            {isEditing ? 'Sauvegarder' : 'Ajouter'}
                         </button>
                         {isEditing && (
@@ -404,10 +404,10 @@ const AdminPanel: React.FC = () => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Produit</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Produit</th>
+                      <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+                      <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                      <th className="px-6 py-3 text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -418,12 +418,9 @@ const AdminPanel: React.FC = () => {
                             <div className="h-10 w-10 flex-shrink-0">
                               <img className="h-10 w-10 rounded-full object-cover" src={product.image} alt="" />
                             </div>
-                            <div className="ml-4">
+                            <div className="ml-4 rtl:ml-0 rtl:mr-4">
                               <div className="text-sm font-medium text-gray-900">{product.name}</div>
                               <div className="text-sm text-gray-500">{product.category}</div>
-                              {product.sizes && (
-                                <div className="text-xs text-gray-400 mt-1">Tailles: {product.sizes.join(', ')}</div>
-                              )}
                             </div>
                           </div>
                         </td>
@@ -435,8 +432,8 @@ const AdminPanel: React.FC = () => {
                             {product.stock}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button onClick={() => handleEdit(product)} className="text-indigo-600 hover:text-indigo-900 mr-4">
+                        <td className="px-6 py-4 whitespace-nowrap text-right rtl:text-left text-sm font-medium">
+                          <button onClick={() => handleEdit(product)} className="text-indigo-600 hover:text-indigo-900 mr-4 rtl:mr-0 rtl:ml-4">
                             <Edit size={18} />
                           </button>
                           <button onClick={() => deleteProduct(product.id)} className="text-red-600 hover:text-red-900">
@@ -459,12 +456,12 @@ const AdminPanel: React.FC = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                         <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Commande</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                        <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                        <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                        <th className="px-6 py-3 text-left rtl:text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                        <th className="px-6 py-3 text-right rtl:text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
@@ -482,7 +479,7 @@ const AdminPanel: React.FC = () => {
                                 {order.status === 'delivered' ? 'Livré' : order.status === 'shipped' ? 'Expédié' : 'En attente'}
                             </span>
                             </td>
-                            <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <td className="px-6 py-4 whitespace-nowrap text-right rtl:text-left text-sm font-medium">
                                 <select 
                                     value={order.status}
                                     onChange={(e) => updateOrderStatus(order.id, e.target.value as any)}
@@ -505,7 +502,7 @@ const AdminPanel: React.FC = () => {
               <div className="max-w-2xl mx-auto">
                   <div className="bg-white rounded-lg p-6">
                       <div className="flex items-center mb-6">
-                          <Shield className="text-chall-orange mr-3" size={32} />
+                          <Shield className="text-chall-orange mr-3 rtl:mr-0 rtl:ml-3" size={32} />
                           <div>
                               <h2 className="text-xl font-bold text-gray-900">Sécurité et Accès</h2>
                               <p className="text-gray-500">Gérez les paramètres de votre compte administrateur.</p>
@@ -519,35 +516,6 @@ const AdminPanel: React.FC = () => {
                               <div className="flex items-center justify-between">
                                   <span className="text-gray-600">Utilisateur : <strong>admin</strong></span>
                                   <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Actif</span>
-                              </div>
-                          </div>
-
-                          {/* Password Reset Mock */}
-                          <div className="border-t border-gray-100 pt-6">
-                              <h3 className="font-medium text-gray-900 mb-4 flex items-center">
-                                  <Key size={18} className="mr-2 text-gray-400" />
-                                  Changer le mot de passe
-                              </h3>
-                              <div className="grid grid-cols-1 gap-4">
-                                  <input type="password" placeholder="Mot de passe actuel" className="border rounded p-2 w-full" disabled />
-                                  <input type="password" placeholder="Nouveau mot de passe" className="border rounded p-2 w-full" disabled />
-                                  <button className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 w-fit opacity-50 cursor-not-allowed">
-                                      Mettre à jour
-                                  </button>
-                                  <p className="text-xs text-gray-400">Pour des raisons de sécurité, veuillez contacter le support technique pour réinitialiser le mot de passe principal.</p>
-                              </div>
-                          </div>
-
-                          {/* 2FA Mock */}
-                          <div className="border-t border-gray-100 pt-6">
-                              <div className="flex items-center justify-between">
-                                  <div>
-                                      <h3 className="font-medium text-gray-900">Authentification à deux facteurs (2FA)</h3>
-                                      <p className="text-sm text-gray-500">Ajoute une couche de sécurité supplémentaire.</p>
-                                  </div>
-                                  <button className="relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-chall-orange bg-gray-200">
-                                      <span className="translate-x-0 pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                                  </button>
                               </div>
                           </div>
                       </div>

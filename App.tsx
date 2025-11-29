@@ -9,11 +9,11 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 
 const AppContent: React.FC = () => {
-  const { view } = useStore();
+  const { view, language } = useStore();
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col min-h-screen" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <Navbar onOpenCart={() => setIsCartOpen(true)} />
       
       <main className="flex-grow">

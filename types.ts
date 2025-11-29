@@ -25,4 +25,6 @@ export interface Order {
 
 export type ViewState = 'shop' | 'admin' | 'checkout' | 'success' | 'login';
 
+export type Language = 'fr' | 'en' | 'ar';
+
 export const CATEGORIES = ['Homme', 'Femme', 'Cosmétique', 'Accessoires'];

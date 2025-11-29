@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem, Order, ViewState } from '../types';
+import React, { createContext, useContext, useState } from 'react';
+import { Product, CartItem, Order, ViewState, Language } from '../types';
 import { INITIAL_PRODUCTS } from '../constants';
+import { translations } from '../translations';
 
 interface StoreContextType {
   products: Product[];
@@ -20,6 +21,9 @@ interface StoreContextType {
   isAdmin: boolean;
   login: (username: string, password: string) => boolean;
   logout: () => void;
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: string, params?: Record<string, string | number>) => string;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -30,6 +34,17 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [orders, setOrders] = useState<Order[]>([]);
   const [view, setView] = useState<ViewState>('shop');
   const [isAdmin, setIsAdmin] = useState(false);
+  const [language, setLanguage] = useState<Language>('fr');
+
+  const t = (key: string, params?: Record<string, string | number>): string => {
+    let text = translations[key]?.[language] || key;
+    if (params) {
+        Object.entries(params).forEach(([k, v]) => {
+            text = text.replace(`{${k}}`, String(v));
+        });
+    }
+    return text;
+  };
 
   const addToCart = (product: Product, size?: string) => {
     setCart((prev) => {
@@ -97,7 +112,6 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const login = (u: string, p: string) => {
-    // Credentials provided by user
     if (u === 'admin' && p === 'chall0662219484@') {
       setIsAdmin(true);
       setView('admin');
@@ -131,6 +145,9 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         isAdmin,
         login,
         logout,
+        language,
+        setLanguage,
+        t,
       }}
     >
       {children}
