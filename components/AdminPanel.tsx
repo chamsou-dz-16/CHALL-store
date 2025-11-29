@@ -3,7 +3,6 @@ import { useStore } from '../context/StoreContext';
 import { Product, CATEGORIES } from '../types';
 import { Trash2, Edit, Package, ShoppingBag, Plus, Sparkles, Loader2, Save, X, Settings, Shield, Key, BarChart3, TrendingUp, DollarSign, Users } from 'lucide-react';
 import { generateProductDescription } from '../services/geminiService';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 const AdminPanel: React.FC = () => {
   const { products, orders, addProduct, updateProduct, deleteProduct, updateOrderStatus } = useStore();
@@ -56,6 +55,9 @@ const AdminPanel: React.FC = () => {
     
     return Object.values(grouped);
   }, [orders]);
+
+  const maxSales = Math.max(...chartData.map(d => d.ventes), 1000); // Avoid divide by zero
+  const maxOrders = Math.max(...chartData.map(d => d.commandes), 10);
 
   const handleGenerateDescription = async () => {
     if (!formData.name || !formData.category) {
@@ -215,39 +217,75 @@ const AdminPanel: React.FC = () => {
                       </div>
                   </div>
 
-                  {/* Charts Section */}
+                  {/* Custom Charts Section */}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                      {/* Bar Chart */}
                       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                           <h3 className="text-lg font-bold text-gray-800 mb-6">Aperçu des Ventes (DA)</h3>
-                          <div className="h-80">
-                              <ResponsiveContainer width="100%" height="100%">
-                                  <BarChart data={chartData}>
-                                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                                      <YAxis axisLine={false} tickLine={false} />
-                                      <Tooltip 
-                                        contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                      />
-                                      <Bar dataKey="ventes" fill="#FF5500" radius={[4, 4, 0, 0]} />
-                                  </BarChart>
-                              </ResponsiveContainer>
+                          <div className="h-64 flex items-end justify-between space-x-2">
+                              {chartData.map((data, index) => (
+                                <div key={index} className="flex flex-col items-center flex-1 group relative">
+                                    <div 
+                                        className="w-full bg-chall-orange/80 rounded-t-sm hover:bg-chall-orange transition-all duration-300 relative"
+                                        style={{ height: `${(data.ventes / maxSales) * 100}%` }}
+                                    >
+                                        {/* Tooltip */}
+                                        <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded pointer-events-none whitespace-nowrap z-10 transition-opacity">
+                                            {data.ventes.toLocaleString()} DA
+                                        </div>
+                                    </div>
+                                    <span className="text-xs text-gray-500 mt-2 font-medium">{data.name}</span>
+                                </div>
+                              ))}
                           </div>
                       </div>
 
+                       {/* Line Chart Simulation */}
                        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                           <h3 className="text-lg font-bold text-gray-800 mb-6">Volume de Commandes</h3>
-                          <div className="h-80">
-                              <ResponsiveContainer width="100%" height="100%">
-                                  <LineChart data={chartData}>
-                                      <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                      <XAxis dataKey="name" axisLine={false} tickLine={false} />
-                                      <YAxis axisLine={false} tickLine={false} />
-                                      <Tooltip 
-                                        contentStyle={{ backgroundColor: '#fff', borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                                      />
-                                      <Line type="monotone" dataKey="commandes" stroke="#D21034" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 8 }} />
-                                  </LineChart>
-                              </ResponsiveContainer>
+                          <div className="h-64 relative border-l border-b border-gray-100">
+                             {/* Grid Lines */}
+                             {[0, 0.25, 0.5, 0.75, 1].map(tick => (
+                                <div key={tick} className="absolute w-full border-t border-gray-100" style={{ bottom: `${tick * 100}%` }}></div>
+                             ))}
+                             
+                             {/* SVG Line */}
+                             <svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none">
+                                <polyline
+                                    fill="none"
+                                    stroke="#D21034"
+                                    strokeWidth="3"
+                                    points={chartData.map((d, i) => {
+                                        const x = (i / (chartData.length - 1)) * 100;
+                                        const y = 100 - ((d.commandes / maxOrders) * 100);
+                                        return `${x}%,${y}%`;
+                                    }).join(' ')}
+                                />
+                                {chartData.map((d, i) => {
+                                     const x = (i / (chartData.length - 1)) * 100;
+                                     const y = 100 - ((d.commandes / maxOrders) * 100);
+                                     return (
+                                        <circle 
+                                            key={i} 
+                                            cx={`${x}%`} 
+                                            cy={`${y}%`} 
+                                            r="4" 
+                                            fill="#fff" 
+                                            stroke="#D21034" 
+                                            strokeWidth="2"
+                                        />
+                                     );
+                                })}
+                             </svg>
+
+                             {/* X Axis Labels */}
+                             <div className="absolute top-full left-0 w-full flex justify-between mt-2">
+                                {chartData.map((d, i) => (
+                                    <span key={i} className="text-xs text-gray-500" style={{ width: `${100/chartData.length}%`, textAlign: 'center' }}>
+                                        {d.name}
+                                    </span>
+                                ))}
+                             </div>
                           </div>
                       </div>
                   </div>
