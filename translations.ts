@@ -1,3 +1,4 @@
+
 import { Language } from './types';
 
 export const translations: Record<string, Record<Language, string>> = {
@@ -19,6 +20,7 @@ export const translations: Record<string, Record<Language, string>> = {
   // Shop
   'shop.collection': { fr: 'Collection', en: 'Collection', ar: 'المجموعة' },
   'shop.all': { fr: 'Tout voir', en: 'View All', ar: 'عرض الكل' },
+  'shop.search_placeholder': { fr: 'Rechercher un produit...', en: 'Search for a product...', ar: 'البحث عن منتج...' },
   'shop.empty': { fr: 'Aucun produit disponible.', en: 'No products available.', ar: 'لا توجد منتجات متاحة.' },
   'shop.add_cart': { fr: 'Ajouter au panier', en: 'Add to Cart', ar: 'أضف إلى السلة' },
   'shop.out_stock': { fr: 'Rupture de stock', en: 'Out of Stock', ar: 'نفد المخزون' },
@@ -30,6 +32,8 @@ export const translations: Record<string, Record<Language, string>> = {
   'cat.Femme': { fr: 'Femme', en: 'Women', ar: 'نساء' },
   'cat.Cosmétique': { fr: 'Cosmétique', en: 'Cosmetics', ar: 'تجميل' },
   'cat.Accessoires': { fr: 'Accessoires', en: 'Accessories', ar: 'إكسسوارات' },
+  'cat.Électronique': { fr: 'Électronique', en: 'Electronics', ar: 'إلكترونيات' },
+  'cat.Maison': { fr: 'Maison', en: 'Home', ar: 'منزل' },
 
   // Cart
   'cart.title': { fr: 'Votre Panier', en: 'Your Cart', ar: 'سلة المشتريات' },
@@ -50,6 +54,9 @@ export const translations: Record<string, Record<Language, string>> = {
   'checkout.address': { fr: 'Adresse', en: 'Address', ar: 'العنوان' },
   'checkout.city': { fr: 'Ville (Wilaya)', en: 'City', ar: 'المدينة' },
   'checkout.phone': { fr: 'Téléphone', en: 'Phone', ar: 'الهاتف' },
+  'checkout.payment_method': { fr: 'Mode de paiement', en: 'Payment Method', ar: 'طريقة الدفع' },
+  'checkout.payment_cod': { fr: 'Paiement à la livraison', en: 'Cash on Delivery', ar: 'الدفع عند الاستلام' },
+  'checkout.payment_beridimob': { fr: 'Beridimob / CCP', en: 'Beridimob / CCP', ar: 'بريدي موب / CCP' },
   'checkout.confirm': { fr: 'Confirmer la commande', en: 'Confirm Order', ar: 'تأكيد الطلب' },
   'checkout.success_title': { fr: 'Merci pour votre commande !', en: 'Thank you for your order!', ar: 'شكراً لطلبك!' },
   'checkout.success_msg': { fr: 'Votre commande a été reçue avec succès.', en: 'Your order has been received successfully.', ar: 'تم استلام طلبك بنجاح.' },
@@ -64,6 +71,16 @@ export const translations: Record<string, Record<Language, string>> = {
   'admin.revenue': { fr: 'Chiffre d\'Affaires', en: 'Total Revenue', ar: 'إجمالي الإيرادات' },
   'admin.total_orders': { fr: 'Commandes Totales', en: 'Total Orders', ar: 'إجمالي الطلبات' },
   'admin.avg_cart': { fr: 'Panier Moyen', en: 'Avg Order Value', ar: 'متوسط الطلب' },
+  'admin.confirm_save': { fr: 'Voulez-vous vraiment sauvegarder ce produit ?', en: 'Are you sure you want to save this product?', ar: 'هل أنت متأكد أنك تريد حفظ هذا المنتج؟' },
+  'admin.confirm_delete': { fr: 'Voulez-vous vraiment supprimer ce produit ?', en: 'Are you sure you want to delete this product?', ar: 'هل أنت متأكد أنك تريد حذف هذا المنتج؟' },
+  
+  // Login
+  'login.remember': { fr: 'Se souvenir de moi', en: 'Remember me', ar: 'تذكرني' },
+
+  // Chatbot
+  'chat.title': { fr: 'Support Client Chall', en: 'Chall Support', ar: 'خدمة عملاء Chall' },
+  'chat.welcome': { fr: 'Bonjour ! Je suis l\'assistant virtuel de Chall. Comment puis-je vous aider avec vos commandes ou produits ?', en: 'Hello! I am Chall\'s virtual assistant. How can I help you with your orders or products?', ar: 'مرحباً! أنا المساعد الافتراضي لـ Chall. كيف يمكنني مساعدتك بخصوص طلباتك أو المنتجات؟' },
+  'chat.placeholder': { fr: 'Écrivez votre message...', en: 'Type your message...', ar: 'اكتب رسالتك...' },
 
   // Footer
   'footer.about': { 

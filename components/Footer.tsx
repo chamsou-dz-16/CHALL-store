@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
 import Logo from './Logo';
@@ -43,10 +44,10 @@ const Footer: React.FC = () => {
           <div>
              <h3 className="text-lg font-bold mb-4 text-orange-400">{t('footer.follow')}</h3>
              <div className="flex space-x-4 rtl:space-x-reverse">
-                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-chall-orange transition">
+                <a href="https://www.facebook.com/profile.php?id=61584221081013" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-chall-orange transition">
                     <Facebook size={20} />
                 </a>
-                <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-chall-orange transition">
+                <a href="https://www.instagram.com/MR_CHAMS_EDDINE_AOUADI" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-chall-orange transition">
                     <Instagram size={20} />
                 </a>
                 <a href="#" className="bg-gray-700 p-2 rounded-full hover:bg-chall-orange transition">

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
-import { ArrowLeft, CheckCircle, ArrowRight } from 'lucide-react';
+import { ArrowLeft, CheckCircle, ArrowRight, CreditCard, Banknote } from 'lucide-react';
 
 const Checkout: React.FC = () => {
-  const { cart, placeOrder, setView, view, t, language } = useStore();
+  const { cart, placeOrder, setView, view, t, language, settings } = useStore();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -11,12 +11,13 @@ const Checkout: React.FC = () => {
     city: '',
     phone: ''
   });
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'beridimob'>('cod');
 
   const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    placeOrder(`${formData.firstName} ${formData.lastName}`);
+    placeOrder(`${formData.firstName} ${formData.lastName}`, paymentMethod);
   };
 
   if (view === 'success') {
@@ -60,9 +61,9 @@ const Checkout: React.FC = () => {
                 <h4 className="text-lg font-medium text-gray-900 mb-4">{t('checkout.summary')}</h4>
                 <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                     <ul className="divide-y divide-gray-200 mb-4">
-                        {cart.map(item => (
-                            <li key={item.id} className="py-2 flex justify-between">
-                                <span className="text-sm text-gray-600">{item.quantity}x {item.name}</span>
+                        {cart.map((item, index) => (
+                            <li key={`${item.id}-${index}`} className="py-2 flex justify-between">
+                                <span className="text-sm text-gray-600">{item.quantity}x {item.name} {item.selectedSize && `(${item.selectedSize})`}</span>
                                 <span className="text-sm font-medium">{(item.price * item.quantity).toLocaleString('fr-DZ')} DA</span>
                             </li>
                         ))}
@@ -133,6 +134,53 @@ const Checkout: React.FC = () => {
                                 onChange={e => setFormData({...formData, phone: e.target.value})}
                             />
                         </div>
+                    </div>
+
+                    {/* Payment Methods */}
+                    <div className="mt-6">
+                         <h4 className="text-lg font-medium text-gray-900 mb-3">{t('checkout.payment_method')}</h4>
+                         <div className="space-y-3">
+                             {settings.payment.codEnabled && (
+                                 <div 
+                                    className={`flex items-center justify-between p-3 border rounded-lg cursor-pointer transition-colors ${paymentMethod === 'cod' ? 'border-chall-orange bg-orange-50' : 'border-gray-200 hover:border-gray-300'}`}
+                                    onClick={() => setPaymentMethod('cod')}
+                                 >
+                                     <div className="flex items-center">
+                                         <input 
+                                            type="radio" 
+                                            checked={paymentMethod === 'cod'} 
+                                            onChange={() => setPaymentMethod('cod')}
+                                            className="h-4 w-4 text-chall-orange focus:ring-chall-orange border-gray-300"
+                                         />
+                                         <span className="ml-3 font-medium text-gray-900">{t('checkout.payment_cod')}</span>
+                                     </div>
+                                     <Banknote className="text-gray-500" size={20} />
+                                 </div>
+                             )}
+                             
+                             {settings.payment.beridimobEnabled && (
+                                 <div 
+                                    className={`flex items-start justify-between p-3 border rounded-lg cursor-pointer transition-colors ${paymentMethod === 'beridimob' ? 'border-chall-orange bg-orange-50' : 'border-gray-200 hover:border-gray-300'}`}
+                                    onClick={() => setPaymentMethod('beridimob')}
+                                 >
+                                     <div className="flex items-start">
+                                         <input 
+                                            type="radio" 
+                                            checked={paymentMethod === 'beridimob'} 
+                                            onChange={() => setPaymentMethod('beridimob')}
+                                            className="h-4 w-4 mt-1 text-chall-orange focus:ring-chall-orange border-gray-300"
+                                         />
+                                         <div className="ml-3">
+                                             <span className="block font-medium text-gray-900">{t('checkout.payment_beridimob')}</span>
+                                             {paymentMethod === 'beridimob' && (
+                                                 <p className="text-xs text-gray-500 mt-1">{settings.payment.beridimobInstructions}</p>
+                                             )}
+                                         </div>
+                                     </div>
+                                     <CreditCard className="text-gray-500" size={20} />
+                                 </div>
+                             )}
+                         </div>
                     </div>
 
                     <div className="pt-4">

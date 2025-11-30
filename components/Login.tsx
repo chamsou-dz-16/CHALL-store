@@ -1,16 +1,18 @@
+
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { Lock, User } from 'lucide-react';
 
 const Login: React.FC = () => {
-  const { login } = useStore();
+  const { login, t } = useStore();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(username, password);
+    const success = login(username, password, rememberMe);
     if (!success) {
       setError('Identifiants incorrects. Veuillez réessayer.');
     }
@@ -71,6 +73,23 @@ const Login: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="focus:ring-chall-orange focus:border-chall-orange block w-full pl-10 sm:text-sm border-gray-300 rounded-md p-2 border"
                 />
+              </div>
+            </div>
+
+            {/* Remember Me Checkbox */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <input
+                  id="remember-me"
+                  name="remember-me"
+                  type="checkbox"
+                  className="h-4 w-4 text-chall-orange focus:ring-chall-orange border-gray-300 rounded"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                />
+                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+                  {t('login.remember')}
+                </label>
               </div>
             </div>
 
